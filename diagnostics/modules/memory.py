@@ -24,19 +24,12 @@ class MemoryInfo:
 
     @property
     def percent_used(self) -> float:
-        """Percentage of MemTotal not counted as available.
- 
-        Deliberately based on `available`, not `free` — see Phase 3
-        theory, section 2.2, for why raw MemFree overstates how much
-        memory is actually in use.
-        """
         if self.total == 0:
             return 0.0
         return round((self.used / self.total) * 100, 1)
  
     @property
     def swap_percent_used(self) -> float:
-        """Percentage of configured swap currently in use."""
         if self.swap_total == 0:
             return 0.0
         return round((self.swap_used / self.swap_total) * 100, 1)
