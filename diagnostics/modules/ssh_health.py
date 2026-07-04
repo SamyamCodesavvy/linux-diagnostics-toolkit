@@ -4,7 +4,11 @@ import logging
 from dataclasses import dataclass, field
  
 import paramiko
- 
+
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 logger = logging.getLogger(__name__)
  
 DEFAULT_PORT = 22
@@ -152,11 +156,19 @@ if __name__ == '__main__':
     import os
  
     logging.basicConfig(level=logging.INFO)
+
+    # put SSH credentials in a .env file
+    hostname = os.getenv("SSH_HOST")   
+    username = os.getenv("SSH_USERNAME")  
+    port = int(os.getenv("SSH_PORT", "22"))
+    key_filename = os.getenv("SSH_KEY") or None
+    password = os.getenv("SSH_PASSWORD") or None
+
     result = collect_remote_health(
-        # hostname='ssh-hostname',
-        # username='ssh-username',
-        # key_filename=os.path.expanduser('~/.ssh/id_ed25519'),
-        # password='ssh-password', #replace with password
+        hostname=hostname,
+        username=username,
+        key_filename=key_filename,
+        password=password,
     )
     print(f'Host          : {result.hostname}')
     print(f'Uptime (s)    : {result.uptime_seconds}')
