@@ -50,12 +50,12 @@ def connect(
         client.set_missing_host_key_policy(paramiko.RejectPolicy())
  
     client.connect(
-        hostname=hostname,
-        port=port,
-        username=username,
-        key_filename=key_filename,
-        password=password,
-        timeout=timeout,
+    hostname=hostname,
+    port=port,
+    username=username,
+    key_filename=key_filename,
+    password=password,
+    passphrase=os.getenv("SSH_KEY_PASSPHRASE"),
     )
     return client
 
@@ -165,11 +165,12 @@ if __name__ == '__main__':
     password = os.getenv("SSH_PASSWORD") or None
 
     result = collect_remote_health(
-        hostname=hostname,
-        username=username,
-        key_filename=key_filename,
-        password=password,
-    )
+    hostname=hostname,
+    username=username,
+    key_filename=key_filename,
+    password=password,
+    port=port,
+)
     print(f'Host          : {result.hostname}')
     print(f'Uptime (s)    : {result.uptime_seconds}')
     print(f'Load average  : {result.load_average}')
